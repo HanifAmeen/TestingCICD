@@ -1,17 +1,22 @@
-name: Super-Linter
 
-on: push
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ master ]
 
 jobs:
-  super-lint:
-    name: Lint code base
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: [ ubuntu-latest ]
     steps:
-      - name: Checkout code
+      - name: Checkout Repo
         uses: actions/checkout@v2
-
-      - name: Run Super-Linter
-        uses: github/super-linter@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
         env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
